@@ -25,4 +25,6 @@ hs_err_pid*
 replay_pid*
 target
 .idea
-
+vcs.xml
+misc.xml
+jarRepositories.xml
