@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.org.llm</groupId>
-    <artifactId>llm-bom</artifactId>
+    <groupId>com.org.learning</groupId>
+    <artifactId>learning-bom</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>LLM :: BOM</name>
@@ -23,6 +23,8 @@
         <anthropic-java.version>2.34.0</anthropic-java.version>
         <swagger-parser.version>2.1.22</swagger-parser.version>
         <micrometer-jvm-extras.version>0.2.2</micrometer-jvm-extras.version>
+        <shedlock.version>5.16.0</shedlock.version>
+        <langchain4j-bom.version>1.16.3</langchain4j-bom.version>
     </properties>
 
     <dependencyManagement>
@@ -94,6 +96,18 @@
                 <version>${logstash-logback.version}</version>
             </dependency>
 
+            <!-- ===== Distributed scheduling ===== -->
+            <dependency>
+                <groupId>net.javacrumbs.shedlock</groupId>
+                <artifactId>shedlock-spring</artifactId>
+                <version>${shedlock.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.javacrumbs.shedlock</groupId>
+                <artifactId>shedlock-provider-redis-spring</artifactId>
+                <version>${shedlock.version}</version>
+            </dependency>
+
             <!-- ===== Document processing ===== -->
             <dependency>
                 <groupId>org.apache.pdfbox</groupId>
@@ -116,6 +130,16 @@
                 <groupId>com.anthropic</groupId>
                 <artifactId>anthropic-java</artifactId>
                 <version>${anthropic-java.version}</version>
+            </dependency>
+
+
+            <!-- ===== langchain4j ===== -->
+            <dependency>
+                <groupId>dev.langchain4j</groupId>
+                <artifactId>langchain4j-bom</artifactId>
+                <version>${langchain4j-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <!-- ===== Test utilities ===== -->
