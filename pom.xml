@@ -28,6 +28,10 @@
         <avro.version>1.12.0</avro.version>
         <confluent.version>7.7.1</confluent.version>
         <langchain4j-redis.version>1.16.0-beta26</langchain4j-redis.version>
+        <springdoc.version>2.8.9</springdoc.version>
+        <zxing.version>3.5.3</zxing.version>
+        <samstevens-totp.version>1.7.1</samstevens-totp.version>
+        <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
     </properties>
 
     <dependencyManagement>
@@ -170,6 +174,44 @@
                 <groupId>io.swagger.parser.v3</groupId>
                 <artifactId>swagger-parser</artifactId>
                 <version>${swagger-parser.version}</version>
+            </dependency>
+
+            <!-- ===== OpenAPI / Swagger UI ===== -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+
+            <!-- ===== QR code processing ===== -->
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>core</artifactId>
+                <version>${zxing.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>javase</artifactId>
+                <version>${zxing.version}</version>
+            </dependency>
+
+            <!-- ===== TOTP ===== -->
+            <dependency>
+                <groupId>dev.samstevens.totp</groupId>
+                <artifactId>totp</artifactId>
+                <version>${samstevens-totp.version}</version>
+            </dependency>
+
+            <!-- ===== openapi-generator "spring" template runtime dependency ===== -->
+            <dependency>
+                <groupId>org.openapitools</groupId>
+                <artifactId>jackson-databind-nullable</artifactId>
+                <version>${jackson-databind-nullable.version}</version>
             </dependency>
 
         </dependencies>
