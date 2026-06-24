@@ -6,6 +6,7 @@
     <groupId>com.org.learning</groupId>
     <artifactId>learning-bom</artifactId>
     <version>1.0.0</version>
+
     <packaging>pom</packaging>
     <name>LLM :: BOM</name>
     <description>Bill of Materials — single source of truth for all dependency versions</description>
