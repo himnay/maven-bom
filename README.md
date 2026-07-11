@@ -1,5 +1,19 @@
 # learning-bom
 
+<img src="image/maven-logo.png" alt="logo" width="80"/>
+
+## Table of contents
+
+1. [1. The problem: dependency version sprawl across a multi-repo organization](#1-the-problem-dependency-version-sprawl-across-a-multi-repo-organization)
+2. [2. How Maven's `<dependencyManagement>` + `scope=import` mechanism actually works](#2-how-mavens-dependencymanagement--scopeimport-mechanism-actually-works)
+3. [3. How this BOM is structured, section by section](#3-how-this-bom-is-structured-section-by-section)
+4. [4. Deliberately held-back versions — and why](#4-deliberately-held-back-versions--and-why)
+5. [5. Position in the workspace's three-tier dependency-management chain](#5-position-in-the-workspaces-three-tier-dependency-management-chain)
+6. [6. How to import (already wired — service repos should not repeat this)](#6-how-to-import-already-wired--service-repos-should-not-repeat-this)
+7. [7. How to add a new managed dependency](#7-how-to-add-a-new-managed-dependency)
+8. [8. Quick reference — all managed dependencies](#8-quick-reference--all-managed-dependencies)
+9. [9. Versioning policy for this BOM itself](#9-versioning-policy-for-this-bom-itself)
+
 **groupId:** `com.org.learning` · **artifactId:** `learning-bom` · **packaging:** `pom` · **current version:** `1.1.0`
 
 This repository is a Maven **Bill of Materials (BOM)**: a `pom`-packaged artifact whose entire
