@@ -47,6 +47,8 @@ breaking, Shedlock for distributed scheduling, or PDFBox/POI/Tesseract for docum
 Without a shared mechanism, each repo's `pom.xml` would need its own `<version>` tag for each of
 these dependencies. In practice, that produces a specific, well-known set of failure modes:
 
+<ul>
+
 - **Version drift.** `llm-chat` pins `resilience4j` 2.2.0 while `llm-gateway` pins 2.4.0. Nobody
   planned this; it just happened because each repo was bumped at a different time by whoever was
   touching it that week. Now behavior (and available APIs) differs between services that are
@@ -68,6 +70,8 @@ these dependencies. In practice, that produces a specific, well-known set of fai
   knowledge once, rather than rediscovering it independently in every repo that upgrades.
 - **No single place to reason about "what are we actually running."** When a security advisory
   drops for, say, Apache POI, an engineer needs one file to open, not twenty.
+
+</ul>
 
 A BOM solves all of this by inverting the responsibility: instead of every consuming repo
 declaring "I want version X of library L," the BOM declares "this organization's officially
@@ -422,6 +426,8 @@ This BOM is never a Maven `<parent>` of anything — it is `pom`-packaged and on
 `scope=import`-ed. The actual **parent/child inheritance chain** and the **BOM import** are two
 separate mechanisms that compose, as described in §2.3:
 
+<ul>
+
 - **`learning-bom`** (this repo) — declares no parent, packaging `pom`, only a
   `<dependencyManagement>` block. Never depended on directly by a leaf service.
 - **`super-pom`** (`com.org.llm:super-pom`) — its own Maven `<parent>` is
@@ -444,6 +450,8 @@ separate mechanisms that compose, as described in §2.3:
   Every version is resolved transitively: leaf → `super-pom` (ordinary parent inheritance) →
   `learning-bom` (import, merged into `super-pom`'s effective `dependencyManagement`) → the
   concrete pinned version or platform-BOM entry.
+
+</ul>
 
 The leaf repo never mentions `learning-bom`'s `groupId:artifactId` anywhere in its own `pom.xml`.
 This is the entire point of the pattern: centralizing the *knowledge* of which version to use, in
@@ -608,6 +616,8 @@ correctly, or the dependency truly isn't managed here yet and belongs in this BO
 `learning-bom`'s own `<version>` follows semantic versioning as a signal to `super-pom` (its sole
 consumer):
 
+<ul>
+
 - **Patch** (`1.1.0` → `1.1.1`): version-number-only bumps to existing managed entries (e.g.
   bumping `pdfbox.version`), no additions or removals.
 - **Minor** (`1.1.0` → `1.2.0`): a new managed dependency or platform BOM is added; existing
@@ -615,6 +625,8 @@ consumer):
 - **Major** (`1.1.0` → `2.0.0`): a managed entry is removed, or an existing property's semantics
   change in a way that could silently change resolved versions for existing consumers (e.g.
   swapping which platform BOM wins on an overlapping coordinate).
+
+</ul>
 
 `super-pom` pins the consumed version explicitly via `<learning-bom.version>`, so a new
 `learning-bom` release never affects any leaf repo until `super-pom` is deliberately updated to
