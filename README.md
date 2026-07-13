@@ -36,7 +36,7 @@ three-tier dependency-management chain that spans this developer's multi-repo Ma
 
 ---
 
-## 1. The problem: dependency version sprawl across a multi-repo organization
+## 1. 🔨 The problem: dependency version sprawl across a multi-repo organization
 
 This workspace is not one monolith — it is roughly twenty independent Maven repos, each with its
 own `pom.xml`, built and released independently, sharing a substantial overlapping set of
@@ -84,7 +84,7 @@ services need that isn't covered by an upstream BOM.
 
 ---
 
-## 2. How Maven's `<dependencyManagement>` + `scope=import` mechanism actually works
+## 2. 🔨 How Maven's `<dependencyManagement>` + `scope=import` mechanism actually works
 
 Maven has two related-but-distinct concepts that are frequently confused:
 
@@ -155,7 +155,7 @@ version table for free, with zero awareness that `learning-bom` exists.
 
 ---
 
-## 3. How this BOM is structured, section by section
+## 3. 🔨 How this BOM is structured, section by section
 
 The full `pom.xml` is organized as one `<dependencyManagement>` block with clearly commented
 sections. Below is a walkthrough of each, matching the actual file.
@@ -352,7 +352,7 @@ which repo runs the generator.
 
 ---
 
-## 4. Deliberately held-back versions — and why
+## 4. 🏷️ Deliberately held-back versions — and why
 
 Three properties in this BOM are pinned *below* the latest available upstream release, each with
 an inline comment in `pom.xml` explaining the reasoning. These are the most important entries in
@@ -416,7 +416,7 @@ migration, or removed-API migration) called out in the comment, in the same chan
 
 ---
 
-## 5. Position in the workspace's three-tier dependency-management chain
+## 5. 🔨 Position in the workspace's three-tier dependency-management chain
 
 This BOM is never a Maven `<parent>` of anything — it is `pom`-packaged and only ever
 `scope=import`-ed. The actual **parent/child inheritance chain** and the **BOM import** are two
@@ -498,7 +498,7 @@ flowchart LR
 
 ---
 
-## 6. How to import (already wired — service repos should not repeat this)
+## 6. 🚀 How to import (already wired — service repos should not repeat this)
 
 `super-pom` already performs this import; leaf repos should never need to add it themselves —
 they simply inherit `super-pom` as their `<parent>`:
@@ -524,7 +524,7 @@ correctly, or the dependency truly isn't managed here yet and belongs in this BO
 
 ---
 
-## 7. How to add a new managed dependency
+## 7. 🔨 How to add a new managed dependency
 
 1. **Add a version property** to `<properties>`, following the existing
    `<artifactId>.version` convention (e.g. `<my-lib.version>1.2.3</my-lib.version>`).
@@ -558,7 +558,7 @@ correctly, or the dependency truly isn't managed here yet and belongs in this BO
 
 ---
 
-## 8. Quick reference — all managed dependencies
+## 8. 🔨 Quick reference — all managed dependencies
 
 ### Platform BOMs (import order matters — first declaration wins on overlapping coordinates)
 
@@ -603,7 +603,7 @@ correctly, or the dependency truly isn't managed here yet and belongs in this BO
 
 ---
 
-## 9. Versioning policy for this BOM itself
+## 9. 🔨 Versioning policy for this BOM itself
 
 `learning-bom`'s own `<version>` follows semantic versioning as a signal to `super-pom` (its sole
 consumer):
