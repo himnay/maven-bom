@@ -36,6 +36,7 @@ three-tier dependency-management chain that spans this developer's multi-repo Ma
 
 ---
 
+<a id="1-the-problem-dependency-version-sprawl-across-a-multi-repo-organization"></a>
 ## 1. 🔨 The problem: dependency version sprawl across a multi-repo organization
 
 This workspace is not one monolith — it is roughly twenty independent Maven repos, each with its
@@ -88,6 +89,7 @@ services need that isn't covered by an upstream BOM.
 
 ---
 
+<a id="2-how-mavens-dependencymanagement--scopeimport-mechanism-actually-works"></a>
 ## 2. 🔨 How Maven's `<dependencyManagement>` + `scope=import` mechanism actually works
 
 Maven has two related-but-distinct concepts that are frequently confused:
@@ -159,6 +161,7 @@ version table for free, with zero awareness that `learning-bom` exists.
 
 ---
 
+<a id="3-how-this-bom-is-structured-section-by-section"></a>
 ## 3. 🔨 How this BOM is structured, section by section
 
 The full `pom.xml` is organized as one `<dependencyManagement>` block with clearly commented
@@ -356,6 +359,7 @@ which repo runs the generator.
 
 ---
 
+<a id="4-deliberately-held-back-versions--and-why"></a>
 ## 4. 🏷️ Deliberately held-back versions — and why
 
 Three properties in this BOM are pinned *below* the latest available upstream release, each with
@@ -420,6 +424,7 @@ migration, or removed-API migration) called out in the comment, in the same chan
 
 ---
 
+<a id="5-position-in-the-workspaces-three-tier-dependency-management-chain"></a>
 ## 5. 🔨 Position in the workspace's three-tier dependency-management chain
 
 This BOM is never a Maven `<parent>` of anything — it is `pom`-packaged and only ever
@@ -506,6 +511,7 @@ flowchart LR
 
 ---
 
+<a id="6-how-to-import-already-wired--service-repos-should-not-repeat-this"></a>
 ## 6. 🚀 How to import (already wired — service repos should not repeat this)
 
 `super-pom` already performs this import; leaf repos should never need to add it themselves —
@@ -532,6 +538,7 @@ correctly, or the dependency truly isn't managed here yet and belongs in this BO
 
 ---
 
+<a id="7-how-to-add-a-new-managed-dependency"></a>
 ## 7. 🔨 How to add a new managed dependency
 
 1. **Add a version property** to `<properties>`, following the existing
@@ -566,6 +573,7 @@ correctly, or the dependency truly isn't managed here yet and belongs in this BO
 
 ---
 
+<a id="8-quick-reference--all-managed-dependencies"></a>
 ## 8. 🔨 Quick reference — all managed dependencies
 
 ### Platform BOMs (import order matters — first declaration wins on overlapping coordinates)
@@ -611,6 +619,7 @@ correctly, or the dependency truly isn't managed here yet and belongs in this BO
 
 ---
 
+<a id="9-versioning-policy-for-this-bom-itself"></a>
 ## 9. 🔨 Versioning policy for this BOM itself
 
 `learning-bom`'s own `<version>` follows semantic versioning as a signal to `super-pom` (its sole
