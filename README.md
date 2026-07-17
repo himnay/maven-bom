@@ -173,12 +173,12 @@ sections. Below is a walkthrough of each, matching the actual file.
 <!-- ===== Platform BOMs (import order matters: first declaration wins) ===== -->
 ```
 
-| Imported BOM | Property | Version |
-|---|---|---|
-| `org.springframework.boot:spring-boot-dependencies` | `spring-boot.version` | `4.1.0` |
-| `org.springframework.cloud:spring-cloud-dependencies` | `spring-cloud.version` | `2025.1.2` |
-| `org.springframework.ai:spring-ai-bom` | `spring-ai.version` | `2.0.0` |
-| `org.testcontainers:testcontainers-bom` | `testcontainers.version` | `1.21.4` |
+| Imported BOM                                          | Property                 | Version    |
+|-------------------------------------------------------|--------------------------|------------|
+| `org.springframework.boot:spring-boot-dependencies`   | `spring-boot.version`    | `4.1.0`    |
+| `org.springframework.cloud:spring-cloud-dependencies` | `spring-cloud.version`   | `2025.1.2` |
+| `org.springframework.ai:spring-ai-bom`                | `spring-ai.version`      | `2.0.0`    |
+| `org.testcontainers:testcontainers-bom`               | `testcontainers.version` | `1.21.4`   |
 
 These four are themselves BOMs maintained by upstream projects, each managing dozens to hundreds
 of their own coordinated artifacts (e.g. `spring-boot-dependencies` manages the versions of
@@ -244,11 +244,11 @@ chosen. See §4.3 for why this is held back from the 7.x line.
 ```xml
 <!-- ===== Document processing ===== -->
 ```
-| Artifact | Property | Version | Purpose |
-|---|---|---|---|
-| `org.apache.pdfbox:pdfbox` | `pdfbox.version` | `3.0.7` | Read/write/manipulate PDF documents |
-| `org.apache.poi:poi-ooxml` | `poi-ooxml.version` | `5.5.1` | Read/write Office Open XML (`.docx`/`.xlsx`/`.pptx`) |
-| `net.sourceforge.tess4j:tess4j` | `tess4j.version` | `5.19.0` | JNA bindings to Tesseract OCR |
+| Artifact                        | Property            | Version  | Purpose                                              |
+|---------------------------------|---------------------|----------|------------------------------------------------------|
+| `org.apache.pdfbox:pdfbox`      | `pdfbox.version`    | `3.0.7`  | Read/write/manipulate PDF documents                  |
+| `org.apache.poi:poi-ooxml`      | `poi-ooxml.version` | `5.5.1`  | Read/write Office Open XML (`.docx`/`.xlsx`/`.pptx`) |
+| `net.sourceforge.tess4j:tess4j` | `tess4j.version`    | `5.19.0` | JNA bindings to Tesseract OCR                        |
 
 These three together cover the document-ingestion pipeline used by the RAG/document-processing
 repos in this workspace: extracting text from PDFs, Office documents, and scanned/image-based
@@ -297,10 +297,10 @@ Redis-backed embedding storage.
 ```xml
 <!-- Kafka / Avro ecosystem -->
 ```
-| Artifact | Property | Version |
-|---|---|---|
-| `org.apache.avro:avro` | `avro.version` | `1.12.1` |
-| `io.confluent:kafka-avro-serializer` | `confluent.version` | `8.3.0` |
+| Artifact                             | Property            | Version  |
+|--------------------------------------|---------------------|----------|
+| `org.apache.avro:avro`               | `avro.version`      | `1.12.1` |
+| `io.confluent:kafka-avro-serializer` | `confluent.version` | `8.3.0`  |
 
 Avro provides the schema/serialization format; Confluent's `kafka-avro-serializer` integrates
 Avro (de)serialization with the Confluent Schema Registry for Kafka producers/consumers. Note
@@ -578,44 +578,44 @@ correctly, or the dependency truly isn't managed here yet and belongs in this BO
 
 ### Platform BOMs (import order matters — first declaration wins on overlapping coordinates)
 
-| BOM | Version |
-|---|---|
-| `org.springframework.boot:spring-boot-dependencies` | `4.1.0` |
+| BOM                                                   | Version    |
+|-------------------------------------------------------|------------|
+| `org.springframework.boot:spring-boot-dependencies`   | `4.1.0`    |
 | `org.springframework.cloud:spring-cloud-dependencies` | `2025.1.2` |
-| `org.springframework.ai:spring-ai-bom` | `2.0.0` |
-| `org.testcontainers:testcontainers-bom` | `1.21.4` |
-| `dev.langchain4j:langchain4j-bom` | `1.17.1` |
+| `org.springframework.ai:spring-ai-bom`                | `2.0.0`    |
+| `org.testcontainers:testcontainers-bom`               | `1.21.4`   |
+| `dev.langchain4j:langchain4j-bom`                     | `1.17.1`   |
 
 ### Individually pinned dependencies
 
-| Group / Artifact | Version property | Version |
-|---|---|---|
-| `com.oracle.database.jdbc:ojdbc17` | `ojdbc.version` | `23.26.2.0.0` |
-| `io.github.resilience4j:resilience4j-spring-boot3` | `resilience4j.version` | `2.3.0` (held — §4.1) |
-| `io.github.resilience4j:resilience4j-reactor` | `resilience4j.version` | `2.3.0` (held — §4.1) |
-| `io.github.resilience4j:resilience4j-circuitbreaker` | `resilience4j.version` | `2.3.0` (held — §4.1) |
-| `io.github.resilience4j:resilience4j-micrometer` | `resilience4j.version` | `2.3.0` (held — §4.1) |
-| `io.github.resilience4j:resilience4j-retry` | `resilience4j.version` | `2.3.0` (held — §4.1) |
-| `io.github.mweirauch:micrometer-jvm-extras` | `micrometer-jvm-extras.version` | `0.3.0` |
-| `io.micrometer:context-propagation` | `micrometer-context-propagation.version` | `1.2.1` |
-| `net.logstash.logback:logstash-logback-encoder` | `logstash-logback.version` | `9.0` |
-| `net.javacrumbs.shedlock:shedlock-spring` | `shedlock.version` | `5.16.0` (held — §4.3) |
-| `net.javacrumbs.shedlock:shedlock-provider-jdbc-template` | `shedlock.version` | `5.16.0` (held — §4.3) |
-| `net.javacrumbs.shedlock:shedlock-provider-redis-spring` | `shedlock.version` | `5.16.0` (held — §4.3) |
-| `org.apache.pdfbox:pdfbox` | `pdfbox.version` | `3.0.7` |
-| `org.apache.poi:poi-ooxml` | `poi-ooxml.version` | `5.5.1` |
-| `net.sourceforge.tess4j:tess4j` | `tess4j.version` | `5.19.0` |
-| `com.anthropic:anthropic-java` | `anthropic-java.version` | `2.48.0` |
-| `org.apache.avro:avro` | `avro.version` | `1.12.1` |
-| `io.confluent:kafka-avro-serializer` | `confluent.version` | `8.3.0` |
-| `dev.langchain4j:langchain4j-community-redis` | `langchain4j-redis.version` | `1.17.0-beta27` |
-| `io.swagger.parser.v3:swagger-parser` | `swagger-parser.version` | `2.1.45` |
-| `org.springdoc:springdoc-openapi-starter-webflux-ui` | `springdoc.version` | `3.0.3` |
-| `org.springdoc:springdoc-openapi-starter-webmvc-ui` | `springdoc.version` | `3.0.3` |
-| `com.google.zxing:core` | `zxing.version` | `3.5.4` |
-| `com.google.zxing:javase` | `zxing.version` | `3.5.4` |
-| `dev.samstevens.totp:totp` | `samstevens-totp.version` | `1.7.1` |
-| `org.openapitools:jackson-databind-nullable` | `jackson-databind-nullable.version` | `0.2.10` |
+| Group / Artifact                                          | Version property                         | Version                |
+|-----------------------------------------------------------|------------------------------------------|------------------------|
+| `com.oracle.database.jdbc:ojdbc17`                        | `ojdbc.version`                          | `23.26.2.0.0`          |
+| `io.github.resilience4j:resilience4j-spring-boot3`        | `resilience4j.version`                   | `2.3.0` (held — §4.1)  |
+| `io.github.resilience4j:resilience4j-reactor`             | `resilience4j.version`                   | `2.3.0` (held — §4.1)  |
+| `io.github.resilience4j:resilience4j-circuitbreaker`      | `resilience4j.version`                   | `2.3.0` (held — §4.1)  |
+| `io.github.resilience4j:resilience4j-micrometer`          | `resilience4j.version`                   | `2.3.0` (held — §4.1)  |
+| `io.github.resilience4j:resilience4j-retry`               | `resilience4j.version`                   | `2.3.0` (held — §4.1)  |
+| `io.github.mweirauch:micrometer-jvm-extras`               | `micrometer-jvm-extras.version`          | `0.3.0`                |
+| `io.micrometer:context-propagation`                       | `micrometer-context-propagation.version` | `1.2.1`                |
+| `net.logstash.logback:logstash-logback-encoder`           | `logstash-logback.version`               | `9.0`                  |
+| `net.javacrumbs.shedlock:shedlock-spring`                 | `shedlock.version`                       | `5.16.0` (held — §4.3) |
+| `net.javacrumbs.shedlock:shedlock-provider-jdbc-template` | `shedlock.version`                       | `5.16.0` (held — §4.3) |
+| `net.javacrumbs.shedlock:shedlock-provider-redis-spring`  | `shedlock.version`                       | `5.16.0` (held — §4.3) |
+| `org.apache.pdfbox:pdfbox`                                | `pdfbox.version`                         | `3.0.7`                |
+| `org.apache.poi:poi-ooxml`                                | `poi-ooxml.version`                      | `5.5.1`                |
+| `net.sourceforge.tess4j:tess4j`                           | `tess4j.version`                         | `5.19.0`               |
+| `com.anthropic:anthropic-java`                            | `anthropic-java.version`                 | `2.48.0`               |
+| `org.apache.avro:avro`                                    | `avro.version`                           | `1.12.1`               |
+| `io.confluent:kafka-avro-serializer`                      | `confluent.version`                      | `8.3.0`                |
+| `dev.langchain4j:langchain4j-community-redis`             | `langchain4j-redis.version`              | `1.17.0-beta27`        |
+| `io.swagger.parser.v3:swagger-parser`                     | `swagger-parser.version`                 | `2.1.45`               |
+| `org.springdoc:springdoc-openapi-starter-webflux-ui`      | `springdoc.version`                      | `3.0.3`                |
+| `org.springdoc:springdoc-openapi-starter-webmvc-ui`       | `springdoc.version`                      | `3.0.3`                |
+| `com.google.zxing:core`                                   | `zxing.version`                          | `3.5.4`                |
+| `com.google.zxing:javase`                                 | `zxing.version`                          | `3.5.4`                |
+| `dev.samstevens.totp:totp`                                | `samstevens-totp.version`                | `1.7.1`                |
+| `org.openapitools:jackson-databind-nullable`              | `jackson-databind-nullable.version`      | `0.2.10`               |
 
 ---
 
