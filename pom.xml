@@ -15,10 +15,8 @@
         <spring-boot.version>4.1.0</spring-boot.version>
         <spring-cloud.version>2025.1.2</spring-cloud.version>
         <spring-ai.version>2.0.0</spring-ai.version>
-        <!-- resilience4j 2.4.0 ships SpringBoot3Verifier that refuses Spring Boot 4.x at startup — hold at 2.3.0 -->
         <resilience4j.version>2.3.0</resilience4j.version>
         <logstash-logback.version>9.0</logstash-logback.version>
-        <!-- Testcontainers 2.x renames module artifacts (junit-jupiter/postgresql/kafka/r2dbc no longer managed) — staying on latest 1.x until code migrates -->
         <testcontainers.version>1.21.4</testcontainers.version>
         <pdfbox.version>3.0.8</pdfbox.version>
         <poi-ooxml.version>5.5.1</poi-ooxml.version>
@@ -27,7 +25,6 @@
         <swagger-parser.version>2.1.45</swagger-parser.version>
         <micrometer-jvm-extras.version>0.3.0</micrometer-jvm-extras.version>
         <micrometer-context-propagation.version>1.2.1</micrometer-context-propagation.version>
-        <!-- shedlock 7.x drops net.javacrumbs.shedlock.micrometer + AopMode used by learning-shedlock — hold at 5.16.0 until code migrates -->
         <shedlock.version>5.16.0</shedlock.version>
         <langchain4j-bom.version>1.18.0</langchain4j-bom.version>
         <avro.version>1.12.1</avro.version>
@@ -43,7 +40,6 @@
     <dependencyManagement>
         <dependencies>
 
-            <!-- ===== Platform BOMs (import order matters: first declaration wins) ===== -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -73,14 +69,12 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- ===== Oracle JDBC ===== -->
             <dependency>
                 <groupId>com.oracle.database.jdbc</groupId>
                 <artifactId>ojdbc17</artifactId>
                 <version>${ojdbc.version}</version>
             </dependency>
 
-            <!-- ===== Resilience4j ===== -->
             <dependency>
                 <groupId>io.github.resilience4j</groupId>
                 <artifactId>resilience4j-spring-boot3</artifactId>
@@ -107,7 +101,6 @@
                 <version>${resilience4j.version}</version>
             </dependency>
 
-            <!-- ===== Observability ===== -->
             <dependency>
                 <groupId>io.github.mweirauch</groupId>
                 <artifactId>micrometer-jvm-extras</artifactId>
@@ -119,14 +112,12 @@
                 <version>${micrometer-context-propagation.version}</version>
             </dependency>
 
-            <!-- ===== Structured logging ===== -->
             <dependency>
                 <groupId>net.logstash.logback</groupId>
                 <artifactId>logstash-logback-encoder</artifactId>
                 <version>${logstash-logback.version}</version>
             </dependency>
 
-            <!-- ===== Distributed scheduling ===== -->
             <dependency>
                 <groupId>net.javacrumbs.shedlock</groupId>
                 <artifactId>shedlock-spring</artifactId>
@@ -143,7 +134,6 @@
                 <version>${shedlock.version}</version>
             </dependency>
 
-            <!-- ===== Document processing ===== -->
             <dependency>
                 <groupId>org.apache.pdfbox</groupId>
                 <artifactId>pdfbox</artifactId>
@@ -160,15 +150,12 @@
                 <version>${tess4j.version}</version>
             </dependency>
 
-            <!-- ===== AI SDKs ===== -->
             <dependency>
                 <groupId>com.anthropic</groupId>
                 <artifactId>anthropic-java</artifactId>
                 <version>${anthropic-java.version}</version>
             </dependency>
 
-
-            <!-- ===== langchain4j ===== -->
             <dependency>
                 <groupId>dev.langchain4j</groupId>
                 <artifactId>langchain4j-bom</artifactId>
@@ -177,7 +164,6 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Kafka / Avro ecosystem -->
             <dependency>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro</artifactId>
@@ -189,22 +175,18 @@
                 <version>${confluent.version}</version>
             </dependency>
 
-
             <dependency>
-                <!-- Community modules live on their own (beta) version track, outside langchain4j-bom. -->
                 <groupId>dev.langchain4j</groupId>
                 <artifactId>langchain4j-community-redis</artifactId>
                 <version>${langchain4j-redis.version}</version>
             </dependency>
 
-            <!-- ===== Test utilities ===== -->
             <dependency>
                 <groupId>io.swagger.parser.v3</groupId>
                 <artifactId>swagger-parser</artifactId>
                 <version>${swagger-parser.version}</version>
             </dependency>
 
-            <!-- ===== OpenAPI / Swagger UI ===== -->
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
@@ -216,7 +198,6 @@
                 <version>${springdoc.version}</version>
             </dependency>
 
-            <!-- ===== QR code processing ===== -->
             <dependency>
                 <groupId>com.google.zxing</groupId>
                 <artifactId>core</artifactId>
@@ -228,14 +209,12 @@
                 <version>${zxing.version}</version>
             </dependency>
 
-            <!-- ===== TOTP ===== -->
             <dependency>
                 <groupId>dev.samstevens.totp</groupId>
                 <artifactId>totp</artifactId>
                 <version>${samstevens-totp.version}</version>
             </dependency>
 
-            <!-- ===== openapi-generator "spring" template runtime dependency ===== -->
             <dependency>
                 <groupId>org.openapitools</groupId>
                 <artifactId>jackson-databind-nullable</artifactId>
