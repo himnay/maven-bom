@@ -5,7 +5,7 @@
 
     <groupId>com.org.learning</groupId>
     <artifactId>learning-bom</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 
     <packaging>pom</packaging>
     <name>LLM :: BOM</name>
@@ -20,21 +20,21 @@
         <testcontainers.version>1.21.4</testcontainers.version>
         <pdfbox.version>3.0.8</pdfbox.version>
         <poi-ooxml.version>5.5.1</poi-ooxml.version>
-        <tess4j.version>5.19.0</tess4j.version>
-        <anthropic-java.version>2.52.0</anthropic-java.version>
-        <swagger-parser.version>2.1.45</swagger-parser.version>
+        <tess4j.version>5.20.0</tess4j.version>
+        <anthropic-java.version>2.53.0</anthropic-java.version>
+        <swagger-parser.version>2.1.46</swagger-parser.version>
         <micrometer-jvm-extras.version>0.3.0</micrometer-jvm-extras.version>
         <micrometer-context-propagation.version>1.2.1</micrometer-context-propagation.version>
         <shedlock.version>5.16.0</shedlock.version>
-        <langchain4j-bom.version>1.18.0</langchain4j-bom.version>
+        <langchain4j-bom.version>1.18.1</langchain4j-bom.version>
         <avro.version>1.12.1</avro.version>
         <confluent.version>8.3.0</confluent.version>
         <langchain4j-redis.version>1.18.0-beta28</langchain4j-redis.version>
-        <springdoc.version>3.0.3</springdoc.version>
+        <springdoc.version>3.1.0</springdoc.version>
         <zxing.version>3.5.4</zxing.version>
         <samstevens-totp.version>1.7.1</samstevens-totp.version>
         <jackson-databind-nullable.version>0.2.11</jackson-databind-nullable.version>
-        <ojdbc.version>23.26.2.0.0</ojdbc.version>
+        <ojdbc.version>23.26.3.0.0</ojdbc.version>
     </properties>
 
     <dependencyManagement>
