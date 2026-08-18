@@ -26,7 +26,11 @@
         <swagger-parser.version>2.1.46</swagger-parser.version>
         <micrometer-jvm-extras.version>0.3.0</micrometer-jvm-extras.version>
         <micrometer-context-propagation.version>1.2.1</micrometer-context-propagation.version>
-        <shedlock.version>5.16.0</shedlock.version>
+        <!-- Was held at 5.16.0 on a belief that Shedlock 7.x dropped the micrometer
+             module used by learning-shedlock. Verified false: shedlock-micrometer
+             still ships and resolves fine on 7.7.0, which learning-shedlock already
+             runs (via a local override). Bumped to match and removed that override. -->
+        <shedlock.version>7.7.0</shedlock.version>
         <langchain4j-bom.version>1.18.1</langchain4j-bom.version>
         <avro.version>1.12.1</avro.version>
         <confluent.version>8.3.0</confluent.version>
@@ -143,6 +147,11 @@
             <dependency>
                 <groupId>net.javacrumbs.shedlock</groupId>
                 <artifactId>shedlock-provider-redis-spring</artifactId>
+                <version>${shedlock.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.javacrumbs.shedlock</groupId>
+                <artifactId>shedlock-micrometer</artifactId>
                 <version>${shedlock.version}</version>
             </dependency>
 
