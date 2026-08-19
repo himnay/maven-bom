@@ -1,8 +1,8 @@
-# <span style="color:hsl(52,68%,32%)">learning-bom</span>
+# <span style="color:hsl(52,80%,50%)">learning-bom</span>
 
 <img src="image/maven-logo.png" alt="logo" width="80"/>
 
-## <span style="color:hsl(62,68%,32%)">Table of contents</span>
+## <span style="color:hsl(190,80%,58%)">Table of contents</span>
 
 1. 🔨 [1. The problem: dependency version sprawl across a multi-repo organization](#1-the-problem-dependency-version-sprawl-across-a-multi-repo-organization)
 2. 🔨 [2. How Maven's `<dependencyManagement>` + `scope=import` mechanism actually works](#2-how-mavens-dependencymanagement--scopeimport-mechanism-actually-works)
@@ -32,7 +32,7 @@ This document covers:
 ---
 
 <a id="1-the-problem-dependency-version-sprawl-across-a-multi-repo-organization"></a>
-## <span style="color:hsl(72,68%,32%)">1. 🔨 The problem: dependency version sprawl across a multi-repo organization</span>
+## <span style="color:hsl(327,80%,58%)">1. 🔨 The problem: dependency version sprawl across a multi-repo organization</span>
 
 - This workspace is not one monolith — roughly twenty independent Maven repos, each with its own `pom.xml`, built and released independently.
 - They share a substantial overlapping set of third-party libraries: every repo needs Spring Boot, most need Spring AI and/or LangChain4j, several need Testcontainers, Resilience4j, Shedlock, or PDFBox/POI/Tesseract.
@@ -56,11 +56,11 @@ This document covers:
 ---
 
 <a id="2-how-mavens-dependencymanagement--scopeimport-mechanism-actually-works"></a>
-## <span style="color:hsl(82,68%,32%)">2. 🔨 How Maven's `<dependencyManagement>` + `scope=import` mechanism actually works</span>
+## <span style="color:hsl(105,80%,58%)">2. 🔨 How Maven's `<dependencyManagement>` + `scope=import` mechanism actually works</span>
 
 Maven has two related-but-distinct concepts that are frequently confused:
 
-### <span style="color:hsl(92,68%,32%)">2.1 `<dependencyManagement>` on its own</span>
+### <span style="color:hsl(242,80%,58%)">2.1 `<dependencyManagement>` on its own</span>
 
 - A `<dependencyManagement>` block does **not** add any dependency to a project's classpath.
 - It's purely a table: "if this artifact ever ends up on the classpath (declared directly, by a child, or pulled transitively), and no closer declaration overrides it, use this version / scope / exclusions."
@@ -76,7 +76,7 @@ Maven has two related-but-distinct concepts that are frequently confused:
 - ...with **no** `<version>` gets the version from the nearest enclosing `dependencyManagement` entry matching on `groupId:artifactId` (and `classifier`/`type` if present).
 - This is standard parent → child POM inheritance — works the same whether the managed entry was declared directly in the parent or arrived via an import (below).
 
-### <span style="color:hsl(102,68%,32%)">2.2 `scope=import` — the BOM-specific piece</span>
+### <span style="color:hsl(20,80%,58%)">2.2 `scope=import` — the BOM-specific piece</span>
 
 A plain `<dependency>` entry inside `<dependencyManagement>` can point at another `pom`-packaged artifact and declare `<scope>import</scope>`, e.g. this BOM's own top section:
 
@@ -96,7 +96,7 @@ A plain `<dependency>` entry inside `<dependencyManagement>` can point at anothe
 1. **Additive/textual, not inherited-by-reference.** The importing POM's own entries merge with everything imported. Order matters: if two imported BOMs (or an import and a local entry) both manage the same `groupId:artifactId`, **the first declaration encountered wins** — later ones are silently ignored. This is why this BOM's platform-BOM block is annotated `<!-- import order matters: first declaration wins -->` and always imports `spring-boot-dependencies` before `spring-cloud-dependencies`, `spring-ai-bom`, and `testcontainers-bom` — Spring Cloud's and Spring AI's BOMs sometimes manage a coordinate (e.g. Jackson, Netty) that Spring Boot also manages, and the intent is for Spring Boot's own mutually-tested set to win.
 2. **`scope=import` only works inside `<dependencyManagement>`, on a `<type>pom</type>` dependency.** It's a compile-time signal to Maven's model builder, not a runtime classpath scope like `compile`/`runtime` — the effective POM behaves as though those entries were pasted in directly.
 
-### <span style="color:hsl(112,68%,32%)">2.3 Why this matters for a 3-tier chain</span>
+### <span style="color:hsl(157,80%,58%)">2.3 Why this matters for a 3-tier chain</span>
 
 - Import-scope resolves when Maven builds the **effective POM**; normal parent/child inheritance also merges `dependencyManagement` top-down — the two compose transparently.
 - A POM can *import* a BOM in its own `dependencyManagement`, and every one of its *children* (via ordinary `<parent>` inheritance) inherits the fully-resolved, merged table — without ever mentioning the BOM's `groupId:artifactId`.
@@ -105,11 +105,11 @@ A plain `<dependency>` entry inside `<dependencyManagement>` can point at anothe
 ---
 
 <a id="3-how-this-bom-is-structured-section-by-section"></a>
-## <span style="color:hsl(122,68%,32%)">3. 🔨 How this BOM is structured, section by section</span>
+## <span style="color:hsl(295,80%,58%)">3. 🔨 How this BOM is structured, section by section</span>
 
 The full `pom.xml` is one `<dependencyManagement>` block with clearly commented sections. Walkthrough below, matching the actual file.
 
-### <span style="color:hsl(132,68%,32%)">3.1 Platform BOMs (imported first, in a deliberate order)</span>
+### <span style="color:hsl(72,80%,58%)">3.1 Platform BOMs (imported first, in a deliberate order)</span>
 
 ```xml
 <!-- ===== Platform BOMs (import order matters: first declaration wins) ===== -->
@@ -126,7 +126,7 @@ The full `pom.xml` is one `<dependencyManagement>` block with clearly commented 
 - `spring-cloud-dependencies` manages Spring Cloud Gateway/Config/OpenFeign/etc.; `spring-ai-bom` manages every `spring-ai-*-spring-boot-starter` and underlying model-client artifacts; `testcontainers-bom` manages every module (`postgresql`, `kafka`, `junit-jupiter`).
 - Importing them here, in this order, gives every downstream repo a mutually-tested, internally-consistent framework version set — `learning-bom` never needs to know or re-declare their individual member artifacts.
 
-### <span style="color:hsl(142,68%,32%)">3.2 Oracle JDBC</span>
+### <span style="color:hsl(210,80%,58%)">3.2 Oracle JDBC</span>
 
 ```xml
 <!-- ===== Oracle JDBC ===== -->
@@ -134,7 +134,7 @@ The full `pom.xml` is one `<dependencyManagement>` block with clearly commented 
 - `com.oracle.database.jdbc:ojdbc17` at `${ojdbc.version}` (`23.26.2.0.0`).
 - Oracle doesn't publish a BOM covering this driver conveniently, so it's pinned directly as an individually-managed artifact.
 
-### <span style="color:hsl(152,68%,36%)">3.3 Resilience4j</span>
+### <span style="color:hsl(347,80%,58%)">3.3 Resilience4j</span>
 
 ```xml
 <!-- ===== Resilience4j ===== -->
@@ -142,7 +142,7 @@ The full `pom.xml` is one `<dependencyManagement>` block with clearly commented 
 - Five artifacts — `resilience4j-spring-boot3`, `resilience4j-reactor`, `resilience4j-circuitbreaker`, `resilience4j-micrometer`, `resilience4j-retry` — all pinned together to `${resilience4j.version}` (`2.3.0`).
 - See §4.1 for why this is held below latest.
 
-### <span style="color:hsl(162,68%,36%)">3.4 Observability</span>
+### <span style="color:hsl(125,80%,58%)">3.4 Observability</span>
 
 ```xml
 <!-- ===== Observability ===== -->
@@ -150,14 +150,14 @@ The full `pom.xml` is one `<dependencyManagement>` block with clearly commented 
 - `io.github.mweirauch:micrometer-jvm-extras` (`${micrometer-jvm-extras.version}` = `0.3.0`) — adds JVM metrics (GC, classloading, thread pools) beyond core Micrometer.
 - `io.micrometer:context-propagation` (`${micrometer-context-propagation.version}` = `1.2.1`) — carries `ThreadLocal`/`Reactor Context` state (MDC, tracing spans) across async and reactive boundaries.
 
-### <span style="color:hsl(172,68%,36%)">3.5 Structured logging</span>
+### <span style="color:hsl(262,80%,58%)">3.5 Structured logging</span>
 
 ```xml
 <!-- ===== Structured logging ===== -->
 ```
 - `net.logstash.logback:logstash-logback-encoder` (`${logstash-logback.version}` = `9.0`) — emits JSON-structured log lines consumable by a log aggregator (ELK/Loki/etc.) instead of plain-text log4j-style formatting.
 
-### <span style="color:hsl(182,68%,36%)">3.6 Distributed scheduling</span>
+### <span style="color:hsl(40,80%,58%)">3.6 Distributed scheduling</span>
 
 ```xml
 <!-- ===== Distributed scheduling ===== -->
@@ -166,7 +166,7 @@ The full `pom.xml` is one `<dependencyManagement>` block with clearly commented 
 - Shedlock prevents the same `@Scheduled` job from running concurrently on more than one instance of a horizontally-scaled service, using a JDBC row lock or Redis lock as the distributed mutex, depending on the provider chosen.
 - See §4.3 for why this is held back from the 7.x line.
 
-### <span style="color:hsl(192,68%,36%)">3.7 Document processing</span>
+### <span style="color:hsl(177,80%,58%)">3.7 Document processing</span>
 
 ```xml
 <!-- ===== Document processing ===== -->
@@ -179,7 +179,7 @@ The full `pom.xml` is one `<dependencyManagement>` block with clearly commented 
 
 - These three together cover the document-ingestion pipeline used by the RAG/document-processing repos: extracting text from PDFs, Office documents, and scanned/image-based pages via OCR.
 
-### <span style="color:hsl(202,68%,44%)">3.8 AI SDKs</span>
+### <span style="color:hsl(315,80%,58%)">3.8 AI SDKs</span>
 
 ```xml
 <!-- ===== AI SDKs ===== -->
@@ -187,7 +187,7 @@ The full `pom.xml` is one `<dependencyManagement>` block with clearly commented 
 - `com.anthropic:anthropic-java` at `${anthropic-java.version}` (`2.48.0`) — the official Anthropic Java SDK.
 - Used directly (outside Spring AI's abstraction) wherever a repo needs lower-level access to the Claude Messages API, streaming, or tool-use primitives that Spring AI's starter doesn't expose.
 
-### <span style="color:hsl(212,68%,44%)">3.9 langchain4j</span>
+### <span style="color:hsl(92,80%,58%)">3.9 langchain4j</span>
 
 ```xml
 <!-- ===== langchain4j ===== -->
@@ -209,7 +209,7 @@ Separately, further down the file:
 - Reason: `langchain4j-community` modules (Redis, and others) release on their own beta cadence, independent of the core BOM's line — they aren't managed by it at all.
 - This entry exists because a repo in this workspace (`llm-rag` or similar) needs Redis-backed embedding storage.
 
-### <span style="color:hsl(222,68%,44%)">3.10 Kafka / Avro ecosystem</span>
+### <span style="color:hsl(230,80%,58%)">3.10 Kafka / Avro ecosystem</span>
 
 ```xml
 <!-- Kafka / Avro ecosystem -->
@@ -222,14 +222,14 @@ Separately, further down the file:
 - Avro provides the schema/serialization format; Confluent's `kafka-avro-serializer` integrates Avro (de)serialization with the Confluent Schema Registry for Kafka producers/consumers.
 - Note: `io.confluent` artifacts are **not** published to Maven Central — any repo consuming this managed version needs Confluent's Maven repository configured (`super-pom` already declares it under `<repositories>`).
 
-### <span style="color:hsl(232,68%,44%)">3.11 Test utilities</span>
+### <span style="color:hsl(7,80%,58%)">3.11 Test utilities</span>
 
 ```xml
 <!-- ===== Test utilities ===== -->
 ```
 - `io.swagger.parser.v3:swagger-parser` (`${swagger-parser.version}` = `2.1.45`) — parses/validates OpenAPI/Swagger specification documents, used in tests asserting a service's generated OpenAPI spec is well-formed or matches a contract.
 
-### <span style="color:hsl(242,68%,44%)">3.12 OpenAPI / Swagger UI</span>
+### <span style="color:hsl(145,80%,58%)">3.12 OpenAPI / Swagger UI</span>
 
 ```xml
 <!-- ===== OpenAPI / Swagger UI ===== -->
@@ -237,7 +237,7 @@ Separately, further down the file:
 - `org.springdoc:springdoc-openapi-starter-webflux-ui` and `org.springdoc:springdoc-openapi-starter-webmvc-ui`, both at `${springdoc.version}` (`3.0.3`).
 - Generates OpenAPI 3 documentation and a Swagger UI page from Spring MVC or WebFlux controller annotations, depending on which stack a repo uses.
 
-### <span style="color:hsl(252,68%,44%)">3.13 QR code processing</span>
+### <span style="color:hsl(282,80%,58%)">3.13 QR code processing</span>
 
 ```xml
 <!-- ===== QR code processing ===== -->
@@ -245,14 +245,14 @@ Separately, further down the file:
 - `com.google.zxing:core` and `com.google.zxing:javase`, both at `${zxing.version}` (`3.5.4`).
 - Generate/decode QR codes (and other barcode formats); `javase` layers `java.awt`/ImageIO bindings on top of the platform-independent `core`.
 
-### <span style="color:hsl(262,68%,44%)">3.14 TOTP</span>
+### <span style="color:hsl(60,80%,50%)">3.14 TOTP</span>
 
 ```xml
 <!-- ===== TOTP ===== -->
 ```
 - `dev.samstevens.totp:totp` at `${samstevens-totp.version}` (`1.7.1`) — implements RFC 6238 Time-based One-Time Password generation/validation, used for 2FA/MFA flows.
 
-### <span style="color:hsl(272,68%,44%)">3.15 `openapi-generator` "spring" template runtime dependency</span>
+### <span style="color:hsl(197,80%,58%)">3.15 `openapi-generator` "spring" template runtime dependency</span>
 
 ```xml
 <!-- ===== openapi-generator "spring" template runtime dependency ===== -->
@@ -264,12 +264,12 @@ Separately, further down the file:
 ---
 
 <a id="4-deliberately-held-back-versions--and-why"></a>
-## <span style="color:hsl(282,68%,44%)">4. 🏷️ Deliberately held-back versions — and why</span>
+## <span style="color:hsl(335,80%,58%)">4. 🏷️ Deliberately held-back versions — and why</span>
 
 - Three properties in this BOM are pinned *below* the latest available upstream release, each with an inline comment in `pom.xml` explaining the reasoning.
 - These are the most important entries to understand — they represent accumulated debugging knowledge that would otherwise be rediscovered independently by whoever next runs `mvn versions:display-dependency-updates` and blindly bumps everything to latest.
 
-### <span style="color:hsl(292,68%,44%)">4.1 Resilience4j — held at `2.3.0`</span>
+### <span style="color:hsl(112,80%,58%)">4.1 Resilience4j — held at `2.3.0`</span>
 
 ```xml
 <!-- resilience4j 2.4.0 ships SpringBoot3Verifier that refuses Spring Boot 4.x at startup — hold at 2.3.0 -->
@@ -281,7 +281,7 @@ Separately, further down the file:
 - Pragmatic fix: stay one minor version back, on 2.3.0, which predates the verifier and works correctly against Spring Boot 4.x.
 - Revisit once Resilience4j ships a release whose verifier is aware of Spring Boot 4.
 
-### <span style="color:hsl(302,68%,44%)">4.2 Testcontainers — held at `1.21.4`</span>
+### <span style="color:hsl(250,80%,58%)">4.2 Testcontainers — held at `1.21.4`</span>
 
 ```xml
 <!-- Testcontainers 2.x renames module artifacts (junit-jupiter/postgresql/kafka/r2dbc no longer managed) — staying on latest 1.x until code migrates -->
@@ -293,7 +293,7 @@ Separately, further down the file:
 - Upgrading the version property alone, without touching every test module's dependency declarations across every repo, would break builds workspace-wide.
 - Staying on latest `1.x` (`1.21.4`) until the module rename is deliberately migrated everywhere at once.
 
-### <span style="color:hsl(312,68%,44%)">4.3 Shedlock — held at `5.16.0`</span>
+### <span style="color:hsl(27,80%,58%)">4.3 Shedlock — held at `5.16.0`</span>
 
 ```xml
 <!-- shedlock 7.x drops net.javacrumbs.shedlock.micrometer + AopMode used by learning-shedlock — hold at 5.16.0 until code migrates -->
@@ -309,7 +309,7 @@ Separately, further down the file:
 ---
 
 <a id="5-position-in-the-workspaces-three-tier-dependency-management-chain"></a>
-## <span style="color:hsl(322,68%,44%)">5. 🔨 Position in the workspace's three-tier dependency-management chain</span>
+## <span style="color:hsl(165,80%,58%)">5. 🔨 Position in the workspace's three-tier dependency-management chain</span>
 
 - This BOM is never a Maven `<parent>` of anything — `pom`-packaged, only ever `scope=import`-ed.
 - The **parent/child inheritance chain** and the **BOM import** are two separate mechanisms that compose, as described in §2.3:
@@ -325,7 +325,7 @@ Separately, further down the file:
 - The leaf repo never mentions `learning-bom`'s `groupId:artifactId` anywhere in its own `pom.xml`.
 - That's the entire point: centralize the *knowledge* of which version to use in exactly one place, while every consumer stays completely unaware of where that knowledge lives.
 
-### <span style="color:hsl(332,68%,44%)">5.1 Chain diagram</span>
+### <span style="color:hsl(302,80%,58%)">5.1 Chain diagram</span>
 
 ```mermaid
 flowchart TD
@@ -351,7 +351,7 @@ flowchart TD
     L3 -.-> BOM
 ```
 
-### <span style="color:hsl(342,68%,44%)">5.2 Managed libraries grouped by category</span>
+### <span style="color:hsl(80,80%,58%)">5.2 Managed libraries grouped by category</span>
 
 ```mermaid
 flowchart LR
@@ -375,7 +375,7 @@ flowchart LR
 ---
 
 <a id="6-how-to-import-already-wired--service-repos-should-not-repeat-this"></a>
-## <span style="color:hsl(352,68%,44%)">6. 🚀 How to import (already wired — service repos should not repeat this)</span>
+## <span style="color:hsl(217,80%,58%)">6. 🚀 How to import (already wired — service repos should not repeat this)</span>
 
 - `super-pom` already performs this import; leaf repos should never need to add it themselves — they simply inherit `super-pom` as their `<parent>`:
 
@@ -399,7 +399,7 @@ flowchart LR
 ---
 
 <a id="7-how-to-add-a-new-managed-dependency"></a>
-## <span style="color:hsl(2,68%,44%)">7. 🔨 How to add a new managed dependency</span>
+## <span style="color:hsl(355,80%,58%)">7. 🔨 How to add a new managed dependency</span>
 
 1. **Add a version property** to `<properties>`, following the existing `<artifactId>.version` convention (e.g. `<my-lib.version>1.2.3</my-lib.version>`).
 2. **Add the dependency** under `<dependencyManagement><dependencies>`, placed in (or under a new) section comment matching this file's categorization.
@@ -419,9 +419,9 @@ flowchart LR
 ---
 
 <a id="8-quick-reference--all-managed-dependencies"></a>
-## <span style="color:hsl(12,68%,44%)">8. 🔨 Quick reference — all managed dependencies</span>
+## <span style="color:hsl(132,80%,58%)">8. 🔨 Quick reference — all managed dependencies</span>
 
-### <span style="color:hsl(22,68%,44%)">Platform BOMs (import order matters — first declaration wins on overlapping coordinates)</span>
+### <span style="color:hsl(270,80%,58%)">Platform BOMs (import order matters — first declaration wins on overlapping coordinates)</span>
 
 | BOM                                                   | Version    |
 |-------------------------------------------------------|------------|
@@ -431,7 +431,7 @@ flowchart LR
 | `org.testcontainers:testcontainers-bom`               | `1.21.4`   |
 | `dev.langchain4j:langchain4j-bom`                     | `1.17.1`   |
 
-### <span style="color:hsl(32,68%,44%)">Individually pinned dependencies</span>
+### <span style="color:hsl(47,80%,50%)">Individually pinned dependencies</span>
 
 | Group / Artifact                                          | Version property                         | Version                |
 |-------------------------------------------------------------|--------------------------------------------|---------------------------|
@@ -465,7 +465,7 @@ flowchart LR
 ---
 
 <a id="9-versioning-policy-for-this-bom-itself"></a>
-## <span style="color:hsl(42,68%,32%)">9. 🔨 Versioning policy for this BOM itself</span>
+## <span style="color:hsl(185,80%,58%)">9. 🔨 Versioning policy for this BOM itself</span>
 
 `learning-bom`'s own `<version>` follows semantic versioning as a signal to `super-pom` (its sole consumer):
 
